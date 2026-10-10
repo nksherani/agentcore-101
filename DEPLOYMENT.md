@@ -56,3 +56,24 @@ Traces take about 10 minutes to appear after the first deploy. They show up in C
 
 ## Redeploy after changes
 Edit the code in `app/myagent/`, then run `agentcore deploy -y` again.
+
+## Switching the model to Amazon Nova 2 Lite
+
+The default model was Claude Sonnet 4.5. It was changed with a one-line edit in
+`app/myagent/model/load.py`. Strands' `BedrockModel` uses the Converse API, so nothing else changes.
+
+```python
+return BedrockModel(model_id="global.amazon.nova-2-lite-v1:0")
+```
+
+Notes:
+- Nova 2 Lite supports **inference profiles only**. Use `global.amazon.nova-2-lite-v1:0`, or
+  `us.amazon.nova-2-lite-v1:0` to keep traffic in the US. The bare ID `amazon.nova-2-lite-v1:0` fails.
+- Redeploy and test:
+  ```bash
+  agentcore deploy -y
+  agentcore invoke "Hello, who are you?"
+  ```
+- Before the redeploy, invoking the agent returned an `AccessDeniedException` about
+  `aws-marketplace:ViewSubscriptions` / `aws-marketplace:Subscribe`. That came from the old Claude
+  deployment, whose runtime role lacks Marketplace permissions. After the redeploy the agent replied normally.
