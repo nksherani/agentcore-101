@@ -16,6 +16,15 @@
       "runtimeVersion": "PYTHON_3_14",
       "networkMode": "PUBLIC",
       "protocol": "HTTP"
+    },
+    {
+      "name": "tsagent",
+      "build": "CodeZip",
+      "entrypoint": "main.js",
+      "codeLocation": "app/tsagent/",
+      "runtimeVersion": "NODE_22",
+      "networkMode": "PUBLIC",
+      "protocol": "HTTP"
     }
   ],
   "memories": [],
